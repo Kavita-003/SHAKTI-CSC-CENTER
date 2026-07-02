@@ -111,7 +111,7 @@
             font-size: 16px;
         }
 
-        button:hover {
+        button:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
@@ -320,10 +320,18 @@
             font-size: 12px;
             cursor: pointer;
             background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
         }
 
         .action-btn.delete {
             background: #e74c3c;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
         }
         
         .success-banner {
@@ -395,7 +403,7 @@
             <div id="phoneStep">
                 <div class="whatsapp-note">
                     <strong>📱 WhatsApp OTP Verification</strong>
-                    OTP will be sent to your WhatsApp number
+                    OTP आपके WhatsApp पर भेजा जाएगा
                 </div>
 
                 <div class="form-group">
@@ -403,34 +411,34 @@
                     <input type="text" id="phoneInput" placeholder="+91 8571913652" value="+91 8571913652">
                 </div>
 
-                <button onclick="sendOTP()">📤 Send OTP on WhatsApp</button>
+                <button onclick="sendOTP()">📤 भेजें OTP WhatsApp पर</button>
 
                 <p style="text-align: center; color: #999; font-size: 12px; margin-top: 15px;">
-                    Default: +91 8571913652
+                    डिफ़ॉल्ट: +91 8571913652
                 </p>
             </div>
 
             <!-- Step 2: OTP Verification -->
             <div id="otpStep" class="hidden">
                 <p style="text-align: center; color: #666; margin-bottom: 20px;">
-                    Enter 4-digit OTP sent to WhatsApp
+                    WhatsApp पर भेजे गए 4 अंकों का OTP दर्ज करें
                 </p>
 
                 <div class="form-group">
-                    <label>Enter OTP</label>
+                    <label>OTP दर्ज करें</label>
                     <div class="otp-input-group">
-                        <input type="number" class="otp-input" maxlength="1" placeholder="0" min="0" max="9">
-                        <input type="number" class="otp-input" maxlength="1" placeholder="0" min="0" max="9">
-                        <input type="number" class="otp-input" maxlength="1" placeholder="0" min="0" max="9">
-                        <input type="number" class="otp-input" maxlength="1" placeholder="0" min="0" max="9">
+                        <input type="number" class="otp-input" maxlength="1" placeholder="0" min="0" max="9" oninput="this.value=this.value.slice(0,1)">
+                        <input type="number" class="otp-input" maxlength="1" placeholder="0" min="0" max="9" oninput="this.value=this.value.slice(0,1)">
+                        <input type="number" class="otp-input" maxlength="1" placeholder="0" min="0" max="9" oninput="this.value=this.value.slice(0,1)">
+                        <input type="number" class="otp-input" maxlength="1" placeholder="0" min="0" max="9" oninput="this.value=this.value.slice(0,1)">
                     </div>
                 </div>
 
-                <button onclick="verifyOTP()">✅ Verify OTP</button>
+                <button onclick="verifyOTP()">✅ OTP सत्यापित करें</button>
 
                 <div class="timer" id="timer"></div>
 
-                <button class="resend-btn" id="resendBtn" disabled onclick="sendOTP()">🔄 Resend OTP</button>
+                <button class="resend-btn" id="resendBtn" disabled onclick="sendOTP()">🔄 OTP फिर से भेजें</button>
             </div>
         </div>
     </div>
@@ -473,31 +481,31 @@
 
             <!-- Services Section -->
             <div id="services" class="section">
-                <h1>🔧 Manage Services</h1>
+                <h1>🔧 Services Manage करें</h1>
                 <div class="success-banner" id="serviceMsg"></div>
                 
                 <div class="form-group">
                     <label>Service Name</label>
-                    <input type="text" id="serviceName" placeholder="e.g., Aadhaar, PAN, Passport">
+                    <input type="text" id="serviceName" placeholder="जैसे: Aadhaar, PAN, Passport">
                 </div>
 
                 <div class="form-group">
                     <label>Service Description</label>
-                    <textarea id="serviceDesc" placeholder="Describe the service" rows="3"></textarea>
+                    <textarea id="serviceDesc" placeholder="सेवा का विवरण" rows="3"></textarea>
                 </div>
 
                 <div class="grid-2">
                     <div class="form-group">
                         <label>Service Charge (₹)</label>
-                        <input type="number" id="serviceCharge" placeholder="Enter charge amount">
+                        <input type="number" id="serviceCharge" placeholder="राशि दर्ज करें">
                     </div>
                     <div class="form-group">
                         <label>Processing Time</label>
-                        <input type="text" id="serviceTime" placeholder="e.g., 2-3 days">
+                        <input type="text" id="serviceTime" placeholder="जैसे: 2-3 days">
                     </div>
                 </div>
 
-                <button onclick="addService()">➕ Add Service</button>
+                <button onclick="addService()">➕ Service जोड़ें</button>
 
                 <h3>📋 Services List</h3>
                 <table id="servicesTable">
@@ -515,22 +523,22 @@
 
             <!-- Documents Section -->
             <div id="documents" class="section">
-                <h1>📄 Manage Documents</h1>
+                <h1>📄 Documents Manage करें</h1>
                 <div class="success-banner" id="docMsg"></div>
 
                 <div class="form-group">
                     <label>Document Name</label>
-                    <input type="text" id="docName" placeholder="e.g., Passport Size Photo">
+                    <input type="text" id="docName" placeholder="जैसे: Passport Size Photo">
                 </div>
 
                 <div class="form-group">
                     <label>Document Description</label>
-                    <textarea id="docDesc" placeholder="Describe what document is needed" rows="3"></textarea>
+                    <textarea id="docDesc" placeholder="दस्तावेज़ का विवरण" rows="3"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>Requirements (e.g., Size, Format)</label>
-                    <textarea id="docRequirements" placeholder="e.g., Size: 3.5cm x 4.5cm, Format: JPG/PNG, Color: Colored" rows="3"></textarea>
+                    <label>Requirements (Size, Format)</label>
+                    <textarea id="docRequirements" placeholder="जैसे: Size: 3.5cm x 4.5cm, Format: JPG/PNG" rows="3"></textarea>
                 </div>
 
                 <div class="form-group">
@@ -540,7 +548,7 @@
                     </select>
                 </div>
 
-                <button onclick="addDocument()">➕ Add Document</button>
+                <button onclick="addDocument()">➕ Document जोड़ें</button>
 
                 <h3>📋 Documents List</h3>
                 <table id="documentsTable">
@@ -562,7 +570,7 @@
                 
                 <div class="calculator-box">
                     <h2>Quick Calculator</h2>
-                    <label>Select Services (Click to add)</label>
+                    <label>Services को चुनें</label>
                     <div id="servicesList" style="margin-top: 15px;"></div>
                     
                     <div style="margin-top: 20px;">
@@ -598,10 +606,10 @@
 
                 <div class="form-group">
                     <label>WhatsApp Message Template</label>
-                    <textarea id="whatsappMessage" placeholder="Hi! I want to send you the required documents." rows="5">Hello! Please send me the documents list and quote for the required services.</textarea>
+                    <textarea id="whatsappMessage" placeholder="WhatsApp message template" rows="5">नमस्ते! कृपया आवश्यक दस्तावेज़ों की सूची और सेवा के लिए कोटेशन भेजें।</textarea>
                 </div>
 
-                <button onclick="saveWhatsappConfig()">💾 Save Configuration</button>
+                <button onclick="saveWhatsappConfig()">💾 Configuration Save करें</button>
 
                 <h3>📱 Preview</h3>
                 <div class="calculator-box">
@@ -632,35 +640,37 @@
                 </div>
 
                 <div class="form-group">
-                    <label>WhatsApp Number (for OTP verification)</label>
+                    <label>WhatsApp Number (OTP के लिए)</label>
                     <input type="text" id="centerWhatsapp" placeholder="+91 8571913652" value="+91 8571913652">
                 </div>
 
-                <button onclick="saveSettings()">💾 Save Settings</button>
+                <button onclick="saveSettings()">💾 Settings Save करें</button>
             </div>
         </div>
     </div>
 
     <script>
         // OTP Configuration
-        const ADMIN_PHONE = "+91 8571913652"; // आपका WhatsApp नंबर
-        const OTP_VALIDITY = 5 * 60 * 1000; // 5 मिनट
+        const ADMIN_PHONE = "+91 8571913652";
+        const OTP_VALIDITY = 5 * 60 * 1000;
         let generatedOTP = null;
         let otpExpiryTime = null;
         let otpResendTimer = null;
 
-        // Auto-focus OTP inputs
-        document.addEventListener('input', function(e) {
+        // OTP Auto-focus
+        document.addEventListener('keyup', function(e) {
             if (e.target.classList.contains('otp-input')) {
                 const inputs = document.querySelectorAll('.otp-input');
-                if (e.target.value) {
-                    const nextInput = e.target.nextElementSibling;
-                    if (nextInput) nextInput.focus();
+                if (e.target.value && e.target.nextElementSibling) {
+                    e.target.nextElementSibling.focus();
+                }
+                if (e.key === 'Backspace' && !e.target.value && e.target.previousElementSibling) {
+                    e.target.previousElementSibling.focus();
                 }
             }
         });
 
-        // Generate random OTP
+        // Generate OTP
         function generateOTP() {
             return Math.floor(1000 + Math.random() * 9000).toString();
         }
@@ -674,38 +684,24 @@
                 return;
             }
 
-            // Validate phone format
-            if (!/^\+91\s?\d{10}$/.test(phoneInput.replace(/\s/g, ''))) {
-                showError('कृपया सही WhatsApp नंबर दर्ज करें (जैसे: +91 8571913652)');
-                return;
-            }
-
-            // Generate OTP
             generatedOTP = generateOTP();
             otpExpiryTime = Date.now() + OTP_VALIDITY;
 
-            // Show OTP on console (डेमो के लिए)
-            console.log('🔐 Your OTP:', generatedOTP);
-            console.log('⏱️ OTP expires in 5 minutes');
+            console.log('🔐 Demo OTP:', generatedOTP);
+            console.log('⏱️ OTP is valid for 5 minutes');
 
-            // In production, send via WhatsApp API
-            // For demo: show message
-            showSuccess(`✅ OTP भेज दिया गया!<br>डेमो OTP: <strong>${generatedOTP}</strong><br>(Console में भी देख सकते हैं)`);
+            showSuccess(`✅ Demo OTP: <strong style="font-size: 18px;">${generatedOTP}</strong><br>Console में भी देख सकते हैं (F12)`);
 
-            // Switch to OTP entry
             document.getElementById('phoneStep').classList.add('hidden');
             document.getElementById('otpStep').classList.remove('hidden');
 
-            // Clear previous OTP inputs
             document.querySelectorAll('.otp-input').forEach(input => {
                 input.value = '';
             });
             document.querySelector('.otp-input').focus();
 
-            // Start countdown timer
             startOTPTimer();
             
-            // Enable resend after 30 seconds
             setTimeout(() => {
                 document.getElementById('resendBtn').disabled = false;
             }, 30000);
@@ -723,6 +719,8 @@
 
             if (Date.now() > otpExpiryTime) {
                 showError('❌ OTP एक्सपायर हो गया है। दोबारा भेजें');
+                document.getElementById('phoneStep').classList.remove('hidden');
+                document.getElementById('otpStep').classList.add('hidden');
                 return;
             }
 
@@ -731,7 +729,6 @@
                 return;
             }
 
-            // OTP verified!
             showSuccess('✅ सफलतापूर्वक लॉगिन हुए!');
             
             setTimeout(() => {
@@ -739,10 +736,10 @@
             }, 1000);
         }
 
-        // Start OTP countdown timer
+        // Start OTP Timer
         function startOTPTimer() {
             clearInterval(otpResendTimer);
-            let timeLeft = 5 * 60; // 5 मिनट
+            let timeLeft = 5 * 60;
 
             const updateTimer = () => {
                 const minutes = Math.floor(timeLeft / 60);
@@ -778,7 +775,6 @@
                 document.getElementById('adminPanel').classList.add('hidden');
                 document.getElementById('loginScreen').classList.remove('hidden');
                 
-                // Reset login form
                 document.getElementById('phoneStep').classList.remove('hidden');
                 document.getElementById('otpStep').classList.add('hidden');
                 document.getElementById('phoneInput').value = '+91 8571913652';
@@ -789,7 +785,7 @@
             }
         }
 
-        // Show error
+        // Show Error
         function showError(message) {
             const errorDiv = document.getElementById('errorMsg');
             errorDiv.innerHTML = message;
@@ -797,7 +793,7 @@
             setTimeout(() => errorDiv.classList.remove('show'), 5000);
         }
 
-        // Show success
+        // Show Success
         function showSuccess(message) {
             const successDiv = document.getElementById('successMsg');
             successDiv.innerHTML = message;
@@ -817,7 +813,7 @@
             });
         });
 
-        // Local Storage Management
+        // Local Storage
         const DB = {
             getServices: () => JSON.parse(localStorage.getItem('cscServices') || '[]'),
             saveServices: (data) => localStorage.setItem('cscServices', JSON.stringify(data)),
@@ -837,7 +833,7 @@
             const time = document.getElementById('serviceTime').value;
 
             if (!name || !charge) {
-                showBanner('serviceMsg', '❌ कृपया सभी जानकारी भरें', false);
+                showBanner('serviceMsg', '❌ कृपया सभी जानकारी भरें');
                 return;
             }
 
@@ -900,7 +896,7 @@
             const service = document.getElementById('docService').value;
 
             if (!name || !requirements) {
-                showBanner('docMsg', '❌ कृपया सभी जानकारी भरें', false);
+                showBanner('docMsg', '❌ कृपया सभी जानकारी भरें');
                 return;
             }
 
@@ -938,7 +934,7 @@
         }
 
         function deleteDocument(id) {
-            if (confirm('क्या आप इस दस्तावेज को हटाना चाहते हैं?')) {
+            if (confirm('क्या आप इस दस्तावेज़ को हटाना चाहते हैं?')) {
                 const documents = DB.getDocuments();
                 const filtered = documents.filter(d => d.id !== id);
                 DB.saveDocuments(filtered);
@@ -1000,13 +996,13 @@
             updateCalculatorDisplay();
         }
 
-        // WhatsApp Configuration
+        // WhatsApp Config
         function saveWhatsappConfig() {
             const number = document.getElementById('whatsappNumber').value;
             const message = document.getElementById('whatsappMessage').value;
 
             if (!number) {
-                showBanner('whatsappMsg', '❌ कृपया WhatsApp नंबर दर्ज करें', false);
+                showBanner('whatsappMsg', '❌ कृपया WhatsApp नंबर दर्ज करें');
                 return;
             }
 
@@ -1024,7 +1020,7 @@
         }
 
         // Utilities
-        function showBanner(elementId, message, isSuccess = true) {
+        function showBanner(elementId, message) {
             const el = document.querySelector(`#${elementId}`);
             el.textContent = message;
             el.classList.add('show');
@@ -1036,7 +1032,7 @@
             document.getElementById('docCount').textContent = DB.getDocuments().length;
         }
 
-        // Initialize WhatsApp config
+        // Initialize
         const config = DB.getWhatsapp();
         if (config.number) {
             document.getElementById('whatsappNumber').value = config.number;
