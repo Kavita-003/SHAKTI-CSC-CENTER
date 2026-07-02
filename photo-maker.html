@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passport Size Photo Maker - SHAKTI CSC CENTER</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-orange: #ff8c00;
+            --secondary-yellow: #ffc107;
+            --accent-white: #ffffff;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --background: #f8f9fa;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.1) 0%, rgba(255, 193, 7, 0.1) 100%);
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-yellow) 100%);
+            color: var(--accent-white);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: var(--primary-orange);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--secondary-yellow);
+            color: var(--text-dark);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .upload-section, .preview-section {
+            background: var(--accent-white);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--primary-orange);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--secondary-yellow);
+        }
+
+        .upload-area {
+            border: 3px dashed var(--primary-orange);
+            border-radius: 10px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 140, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            background-color: rgba(255, 140, 0, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--primary-orange);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .upload-area p {
+            color: var(--text-dark);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .upload-area small {
+            color: var(--text-light);
+        }
+
+        #photoInput {
+            display: none;
+        }
+
+        .size-selector {
+            margin-top: 20px;
+        }
+
+        .size-selector label {
+            display: block;
+            color: var(--text-dark);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .size-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .size-option {
+            position: relative;
+        }
+
+        .size-option input[type="radio"] {
+            display: none;
+        }
+
+        .size-option label {
+            display: block;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 500;
+            background: white;
+            transition: all 0.3s ease;
+            margin: 0;
+        }
+
+        .size-option input[type="radio"]:checked + label {
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-yellow) 100%);
+            border-color: var(--primary-orange);
+            color: white;
+        }
+
+        .size-option label:hover {
+            border-color: var(--primary-orange);
+            background-color: rgba(255, 140, 0, 0.05);
+        }
+
+        .preview-canvas {
+            width: 100%;
+            border: 2px solid var(--primary-orange);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            background-color: #f5f5f5;
+            display: none;
+            max-height: 500px;
+        }
+
+        .preview-canvas.show {
+            display: block;
+        }
+
+        .controls {
+            display: grid;
+            gap: 15px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-group label {
+            font-weight: bold;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        .control-group input[type="range"],
+        .control-group input[type="color"] {
+            width: 100%;
+            height: 40px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-yellow) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: var(--background);
+            color: var(--primary-orange);
+            border: 2px solid var(--primary-orange);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 140, 0, 0.1);
+        }
+
+        .size-info {
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.1) 0%, rgba(255, 193, 7, 0.1) 100%);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid var(--primary-orange);
+        }
+
+        .size-info h4 {
+            color: var(--primary-orange);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .size-info p {
+            color: var(--text-dark);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .no-preview {
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        .no-preview i {
+            font-size: 3rem;
+            color: var(--secondary-yellow);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: var(--accent-white);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-top: 3px solid var(--primary-orange);
+        }
+
+        .feature-card i {
+            font-size: 2rem;
+            color: var(--secondary-yellow);
+            margin-bottom: 10px;
+        }
+
+        .feature-card h3 {
+            color: var(--primary-orange);
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        .success-msg {
+            display: none;
+            background: #4caf50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .error-msg {
+            display: none;
+            background: #f44336;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .size-options {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-btn">← Back to Services</a>
+
+        <div class="header">
+            <h1>📸 Passport Size Photo Maker</h1>
+            <p>Professional Photo Editor - Ready to Print</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Upload Section -->
+            <div class="upload-section">
+                <h2 class="section-title"><i class="fas fa-upload"></i> Upload Your Photo</h2>
+
+                <div class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Click to upload or drag and drop</p>
+                    <small>Supported: JPG, PNG, JPEG (Max 10MB)</small>
+                    <input type="file" id="photoInput" accept=".jpg,.jpeg,.png,image/jpeg,image/png">
+                </div>
+
+                <div class="size-selector">
+                    <label>📐 Select Photo Size:</label>
+                    <div class="size-options">
+                        <div class="size-option">
+                            <input type="radio" id="size1" name="size" value="4x6" checked>
+                            <label for="size1">4×6 (6 Photos)</label>
+                        </div>
+                        <div class="size-option">
+                            <input type="radio" id="size2" name="size" value="2x3">
+                            <label for="size2">2×3 (12 Photos)</label>
+                        </div>
+                        <div class="size-option">
+                            <input type="radio" id="size3" name="size" value="3x4">
+                            <label for="size3">3×4 (18 Photos)</label>
+                        </div>
+                        <div class="size-option">
+                            <input type="radio" id="size4" name="size" value="1.5x2">
+                            <label for="size4">1.5×2 (24 Photos)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="size-info">
+                    <h4>📋 Selected: 4×6 inches (6 Photos)</h4>
+                    <p>✓ Perfect for passports & visas<br>
+                    ✓ Official document ready<br>
+                    ✓ High quality printing<br>
+                    ✓ Direct print compatible</p>
+                </div>
+
+                <div class="controls">
+                    <div class="control-group">
+                        <label>☀️ Brightness</label>
+                        <input type="range" id="brightness" min="0" max="200" value="100">
+                    </div>
+                    <div class="control-group">
+                        <label>◐ Contrast</label>
+                        <input type="range" id="contrast" min="0" max="200" value="100">
+                    </div>
+                    <div class="control-group">
+                        <label>🎨 Background Color</label>
+                        <input type="color" id="bgColor" value="#ffffff">
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-primary" id="printBtn"><i class="fas fa-print"></i> Print</button>
+                    <button class="btn-secondary" id="downloadBtn"><i class="fas fa-download"></i> Download</button>
+                </div>
+
+                <div class="success-msg" id="successMsg">✅ Photo ready! Click Print or Download</div>
+                <div class="error-msg" id="errorMsg"></div>
+            </div>
+
+            <!-- Preview Section -->
+            <div class="preview-section">
+                <h2 class="section-title"><i class="fas fa-image"></i> Preview</h2>
+
+                <div class="no-preview" id="noPreview">
+                    <i class="fas fa-image"></i>
+                    <p>Upload a photo to see preview here</p>
+                </div>
+
+                <canvas id="previewCanvas" class="preview-canvas"></canvas>
+
+                <div class="size-info">
+                    <h4>💡 Pro Tips:</h4>
+                    <p>✓ Keep face centered in frame<br>
+                    ✓ Use white or light background<br>
+                    ✓ Ensure good lighting<br>
+                    ✓ Keep neutral expression</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-edit"></i>
+                <h3>Easy Edit</h3>
+                <p>Adjust brightness & contrast</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-print"></i>
+                <h3>Direct Print</h3>
+                <p>Print ready instantly</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-download"></i>
+                <h3>Download</h3>
+                <p>Save as PNG or JPG</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-check-circle"></i>
+                <h3>Official Use</h3>
+                <p>Perfect for all documents</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Mobile Ready</h3>
+                <p>Works on any device</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-bolt"></i>
+                <h3>Fast & Free</h3>
+                <p>No registration needed</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const photoInput = document.getElementById('photoInput');
+        const previewCanvas = document.getElementById('previewCanvas');
+        const ctx = previewCanvas.getContext('2d');
+        const brightness = document.getElementById('brightness');
+        const contrast = document.getElementById('contrast');
+        const bgColor = document.getElementById('bgColor');
+        const printBtn = document.getElementById('printBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const noPreview = document.getElementById('noPreview');
+        const successMsg = document.getElementById('successMsg');
+        const errorMsg = document.getElementById('errorMsg');
+        const sizeRadios = document.querySelectorAll('input[name="size"]');
+
+        let uploadedImage = null;
+
+        // Upload area click
+        uploadArea.addEventListener('click', () => {
+            photoInput.click();
+        });
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.background = 'rgba(255, 140, 0, 0.15)';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.background = 'rgba(255, 140, 0, 0.05)';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.background = 'rgba(255, 140, 0, 0.05)';
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelect(files[0]);
+            }
+        });
+
+        // File input change
+        photoInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+
+        function handleFileSelect(file) {
+            // Validate file type
+            const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+            if (!validTypes.includes(file.type)) {
+                showError('❌ Please upload JPG or PNG files only');
+                return;
+            }
+
+            // Validate file size
+            if (file.size > 10 * 1024 * 1024) {
+                showError('❌ File size must be less than 10MB');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                uploadedImage = new Image();
+                uploadedImage.onload = () => {
+                    drawPreview();
+                    showSuccess('✅ Photo uploaded successfully!');
+                };
+                uploadedImage.onerror = () => {
+                    showError('❌ Failed to load image');
+                };
+                uploadedImage.src = e.target.result;
+            };
+            reader.onerror = () => {
+                showError('❌ Failed to read file');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Size configurations
+        const sizes = {
+            '4x6': { width: 1200, height: 900, cols: 2, rows: 3, text: '4×6 inches (6 Photos)' },
+            '2x3': { width: 1200, height: 1800, cols: 4, rows: 3, text: '2×3 inches (12 Photos)' },
+            '3x4': { width: 1200, height: 1600, cols: 3, rows: 2, text: '3×4 inches (18 Photos)' },
+            '1.5x2': { width: 1200, height: 1600, cols: 4, rows: 2, text: '1.5×2 inches (24 Photos)' }
+        };
+
+        function drawPreview() {
+            if (!uploadedImage) return;
+
+            const selectedSize = document.querySelector('input[name="size"]:checked').value;
+            const size = sizes[selectedSize];
+
+            previewCanvas.width = size.width;
+            previewCanvas.height = size.height;
+
+            // Draw background
+            ctx.fillStyle = bgColor.value;
+            ctx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
+
+            // Draw photos grid
+            const photoWidth = previewCanvas.width / size.cols;
+            const photoHeight = previewCanvas.height / size.rows;
+            const totalPhotos = size.cols * size.rows;
+
+            // Apply filters
+            ctx.filter = `brightness(${brightness.value}%) contrast(${contrast.value}%)`;
+
+            for (let i = 0; i < totalPhotos; i++) {
+                const col = i % size.cols;
+                const row = Math.floor(i / size.cols);
+                const x = col * photoWidth;
+                const y = row * photoHeight;
+
+                // Draw border
+                ctx.strokeStyle = '#ddd';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(x, y, photoWidth, photoHeight);
+
+                // Draw image
+                ctx.drawImage(uploadedImage, x, y, photoWidth, photoHeight);
+            }
+
+            ctx.filter = 'none';
+            previewCanvas.classList.add('show');
+            noPreview.style.display = 'none';
+        }
+
+        // Update preview on changes
+        brightness.addEventListener('input', () => {
+            if (uploadedImage) drawPreview();
+        });
+
+        contrast.addEventListener('input', () => {
+            if (uploadedImage) drawPreview();
+        });
+
+        bgColor.addEventListener('input', () => {
+            if (uploadedImage) drawPreview();
+        });
+
+        // Size selection
+        sizeRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const sizeText = sizes[e.target.value].text;
+                document.querySelector('.size-info h4').textContent = '📋 Selected: ' + sizeText;
+                if (uploadedImage) drawPreview();
+            });
+        });
+
+        // Print function
+        printBtn.addEventListener('click', () => {
+            if (!uploadedImage) {
+                showError('⚠️ Please upload a photo first!');
+                return;
+            }
+
+            const printWindow = window.open('', '', 'width=1000,height=800');
+            const img = previewCanvas.toDataURL('image/png');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Print Passport Photos</title>
+                    <style>
+                        * { margin: 0; padding: 0; }
+                        body { padding: 10px; }
+                        img { width: 100%; height: auto; display: block; }
+                    </style>
+                </head>
+                <body onload="window.print(); window.close();">
+                    <img src="${img}" alt="Passport Photos">
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        });
+
+        // Download function
+        downloadBtn.addEventListener('click', () => {
+            if (!uploadedImage) {
+                showError('⚠️ Please upload a photo first!');
+                return;
+            }
+
+            const link = document.createElement('a');
+            link.href = previewCanvas.toDataURL('image/png');
+            link.download = `SHAKTI-passport-photos-${new Date().getTime()}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showSuccess('✅ Photo downloaded successfully!');
+        });
+
+        // Message functions
+        function showSuccess(msg) {
+            successMsg.textContent = msg;
+            successMsg.style.display = 'block';
+            errorMsg.style.display = 'none';
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 3000);
+        }
+
+        function showError(msg) {
+            errorMsg.textContent = msg;
+            errorMsg.style.display = 'block';
+            successMsg.style.display = 'none';
+            setTimeout(() => {
+                errorMsg.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
