@@ -16,6 +16,10 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
 
         .container {
@@ -93,7 +97,6 @@
             border-radius: 10px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
-            cursor: pointer;
             border-left: 4px solid #667eea;
         }
 
@@ -192,10 +195,6 @@
             padding: 25px;
             border-radius: 10px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-
-        .calc-services {
-            margin: 20px 0;
         }
 
         .calc-service-item {
@@ -303,63 +302,26 @@
             margin-bottom: 20px;
         }
 
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: #2c3e50;
-            font-weight: 600;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        .service-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .service-option {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .service-option input {
-            margin-right: 10px;
-            width: 18px;
-            height: 18px;
-        }
-
-        .service-option label {
-            cursor: pointer;
-            flex: 1;
-        }
-
         .empty-state {
             text-align: center;
             padding: 40px 20px;
             color: #999;
         }
 
-        .empty-state img {
-            max-width: 150px;
-            opacity: 0.5;
-            margin-bottom: 20px;
+        .btn-reset {
+            background: #999;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-reset:hover {
+            background: #777;
         }
 
         @media (max-width: 768px) {
@@ -373,10 +335,6 @@
 
             .tab-btn {
                 width: 100%;
-            }
-
-            header h1 {
-                font-size: 22px;
             }
 
             .total-amount {
@@ -417,7 +375,7 @@
                 <h2>💰 Charges Calculator</h2>
                 <p style="color: #666; margin-bottom: 20px;">Select services to calculate total charges</p>
 
-                <div class="service-selector" id="calcSelector"></div>
+                <div id="calcSelector"></div>
 
                 <table class="calc-table">
                     <thead>
@@ -437,7 +395,7 @@
                 <button class="whatsapp-cta" onclick="openWhatsappWithTotal()">
                     📤 Get Quote on WhatsApp
                 </button>
-                <button onclick="resetCalculator()" style="background: #999; color: white; padding: 12px 25px; border: none; border-radius: 50px; cursor: pointer; margin-left: 10px; font-weight: 600;">🔄 Reset</button>
+                <button class="btn-reset" onclick="resetCalculator()">🔄 Reset</button>
             </div>
         </div>
 
@@ -463,6 +421,36 @@
     </div>
 
     <script>
+        // Block console और developer tools
+        document.addEventListener('keydown', function(e) {
+            // F12 block करो
+            if (e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+Shift+I block करो
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+Shift+J block करो
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+Shift+C block करो
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Right-click भी block करो
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
         // Data Management
         const DB = {
             getServices: () => JSON.parse(localStorage.getItem('cscServices') || '[]'),
@@ -493,19 +481,20 @@
             if (services.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state" style="grid-column: 1/-1;">
-                        <p style="font-size: 16px;">No services available yet. Check back soon!</p>
+                        <p style="font-size: 16px;">📋 कोई सेवा उपलब्ध नहीं है।</p>
+                        <p style="font-size: 12px; margin-top: 10px;">कृपया बाद में देखें!</p>
                     </div>
                 `;
                 return;
             }
 
             container.innerHTML = services.map(service => `
-                <div class="service-card" onclick="selectService(${service.id}, '${service.name}')">
+                <div class="service-card">
                     <h3>✅ ${service.name}</h3>
-                    <p>${service.desc || 'Premium Government Service'}</p>
+                    <p>${service.desc || 'सरकारी सेवा'}</p>
                     <div class="service-details">
                         <div class="price">₹${service.charge}</div>
-                        <div class="time">${service.time}</div>
+                        <div class="time">⏱️ ${service.time}</div>
                     </div>
                 </div>
             `).join('');
@@ -519,7 +508,7 @@
             if (documents.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <p style="font-size: 16px;">No documents list available yet.</p>
+                        <p style="font-size: 16px;">📋 कोई दस्तावेज सूची उपलब्ध नहीं है।</p>
                     </div>
                 `;
                 return;
@@ -528,22 +517,22 @@
             container.innerHTML = documents.map(doc => `
                 <div class="doc-card">
                     <h3>📋 ${doc.name}</h3>
-                    ${doc.service ? `<p><strong>For Service:</strong> ${doc.service}</p>` : ''}
+                    ${doc.service ? `<p><strong>सेवा के लिए:</strong> ${doc.service}</p>` : ''}
                     ${doc.desc ? `<p>${doc.desc}</p>` : ''}
                     
-                    <div class="requirement-title">📝 Requirements:</div>
+                    <div class="requirement-title">📝 आवश्यकताएं:</div>
                     <div class="requirements">${doc.requirements}</div>
 
-                    ${doc.name.toLowerCase().includes('photo') ? `
+                    ${doc.name.toLowerCase().includes('photo') || doc.name.toLowerCase().includes('फोटो') ? `
                         <div class="photo-size-guide">
-                            <h4>📸 Passport Size Photo Specification</h4>
-                            <p><strong>Standard Size:</strong> 3.5 cm × 4.5 cm (1.38" × 1.77")</p>
+                            <h4>📸 पासपोर्ट साइज फोटो विनिर्देश</h4>
+                            <p><strong>मानक आकार:</strong> 3.5 सेमी × 4.5 सेमी (1.38" × 1.77")</p>
                             <div class="size-visual">
-                                Size: 3.5cm × 4.5cm
+                                आकार: 3.5cm × 4.5cm
                             </div>
-                            <p><strong>Format:</strong> JPG, PNG, or BMP</p>
-                            <p><strong>Color:</strong> Colored or Black & White</p>
-                            <p><strong>Quality:</strong> Clear and recent photo (3-6 months old)</p>
+                            <p><strong>प्रारूप:</strong> JPG, PNG, या BMP</p>
+                            <p><strong>रंग:</strong> रंगीन या काला और सफेद</p>
+                            <p><strong>गुणवत्ता:</strong> स्पष्ट और हाल की फोटो (3-6 महीने पुरानी)</p>
                         </div>
                     ` : ''}
                 </div>
@@ -555,8 +544,13 @@
             const services = DB.getServices();
             const container = document.getElementById('calcSelector');
             
+            if (services.length === 0) {
+                container.innerHTML = `<p style="color: #999; text-align: center;">कोई सेवा उपलब्ध नहीं है</p>`;
+                return;
+            }
+
             container.innerHTML = services.map(service => `
-                <label class="service-option">
+                <label class="calc-service-item">
                     <input type="checkbox" onchange="toggleService(${service.id}, '${service.name}', ${service.charge})">
                     <span>${service.name} - ₹${service.charge}</span>
                 </label>
@@ -595,15 +589,15 @@
 
         function resetCalculator() {
             selectedServices = [];
-            document.querySelectorAll('.service-selector input').forEach(cb => cb.checked = false);
+            document.querySelectorAll('#calcSelector input[type="checkbox"]').forEach(cb => cb.checked = false);
             updateCalculatorDisplay();
         }
 
         // WhatsApp Integration
         function initWhatsapp() {
             const config = DB.getWhatsapp();
-            const number = config.number || '+919876543210'; // Default number
-            const message = config.message || 'Hi! I want to send you the required documents.';
+            const number = config.number || '+91 8571913652';
+            const message = config.message || 'मुझे दस्तावेज भेजने हैं।';
 
             document.getElementById('whatsappNumber').innerHTML = `📞 <strong>${number}</strong>`;
             
@@ -614,19 +608,20 @@
 
         function openWhatsappWithTotal() {
             const config = DB.getWhatsapp();
-            const number = config.number || '+919876543210';
+            const number = config.number || '+91 8571913652';
             const cleanNumber = number.replace(/\D/g, '');
             
             const services = selectedServices.map(s => `${s.name} (₹${s.charge})`).join(', ');
             const total = selectedServices.reduce((sum, s) => sum + s.charge, 0);
             
-            let message = `Hello! I'm interested in the following services:\n\n${services}\n\nTotal: ₹${total}\n\nPlease send me the required documents list and process this request.`;
+            if (selectedServices.length === 0) {
+                alert('कृपया कम से कम एक सेवा चुनें');
+                return;
+            }
+
+            let message = `नमस्ते! मैं निम्नलिखित सेवाओं में रुचि रखता हूँ:\n\n${services}\n\nकुल: ₹${total}\n\nकृपया आवश्यक दस्तावेज सूची भेजें।`;
             
             window.open(`https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`, '_blank');
-        }
-
-        function selectService(id, name) {
-            alert(`Selected: ${name}\n\nGo to Calculator tab to add multiple services and see total charges!`);
         }
 
         // Initialize
@@ -637,6 +632,7 @@
         window.addEventListener('storage', () => {
             displayServices();
             displayDocuments();
+            updateCalculator();
         });
     </script>
 </body>
