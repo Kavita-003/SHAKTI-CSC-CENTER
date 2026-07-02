@@ -59,6 +59,30 @@
             opacity: 0.95;
         }
 
+        .whatsapp-contact {
+            background: #25d366;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .whatsapp-contact a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1.1rem;
+        }
+
+        .whatsapp-contact a:hover {
+            opacity: 0.9;
+        }
+
         .back-btn {
             display: inline-block;
             margin-bottom: 20px;
@@ -369,15 +393,42 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .upload-section,
+            .section-title,
+            .controls,
+            .button-group,
+            .back-btn,
+            .whatsapp-contact,
+            .header,
+            .features-grid {
+                display: none !important;
+            }
+            .preview-canvas {
+                max-height: none;
+                border: none;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <a href="index.html" class="back-btn">← Back to Services</a>
 
+        <div class="whatsapp-contact">
+            <a href="https://wa.me/918571913651?text=Hello%20SHAKTI%20CSC%20CENTER%21%20I%20need%20passport%20size%20photos" target="_blank">
+                <i class="fab fa-whatsapp"></i> 
+                WhatsApp: +91 8571913651 (For Documents)
+            </a>
+        </div>
+
         <div class="header">
             <h1>📸 Passport Size Photo Maker</h1>
-            <p>Professional Photo Editor - Ready to Print</p>
+            <p>Professional Photo Editor - A4 Format (6 Photos in One Line)</p>
         </div>
 
         <div class="main-content">
@@ -393,33 +444,25 @@
                 </div>
 
                 <div class="size-selector">
-                    <label>📐 Select Photo Size:</label>
+                    <label>📐 Select Layout:</label>
                     <div class="size-options">
                         <div class="size-option">
-                            <input type="radio" id="size1" name="size" value="4x6" checked>
-                            <label for="size1">4×6 (6 Photos)</label>
+                            <input type="radio" id="size1" name="size" value="a4-6photos" checked>
+                            <label for="size1">A4 - 6 Photos (1 Line)</label>
                         </div>
                         <div class="size-option">
-                            <input type="radio" id="size2" name="size" value="2x3">
-                            <label for="size2">2×3 (12 Photos)</label>
-                        </div>
-                        <div class="size-option">
-                            <input type="radio" id="size3" name="size" value="3x4">
-                            <label for="size3">3×4 (18 Photos)</label>
-                        </div>
-                        <div class="size-option">
-                            <input type="radio" id="size4" name="size" value="1.5x2">
-                            <label for="size4">1.5×2 (24 Photos)</label>
+                            <input type="radio" id="size2" name="size" value="a4-8photos">
+                            <label for="size2">A4 - 8 Photos (2 Lines)</label>
                         </div>
                     </div>
                 </div>
 
                 <div class="size-info">
-                    <h4>📋 Selected: 4×6 inches (6 Photos)</h4>
+                    <h4>📋 Selected: A4 - 6 Photos (1 Line)</h4>
                     <p>✓ Perfect for passports & visas<br>
                     ✓ Official document ready<br>
                     ✓ High quality printing<br>
-                    ✓ Direct print compatible</p>
+                    ✓ Direct A4 print compatible</p>
                 </div>
 
                 <div class="controls">
@@ -486,8 +529,8 @@
             </div>
             <div class="feature-card">
                 <i class="fas fa-check-circle"></i>
-                <h3>Official Use</h3>
-                <p>Perfect for all documents</p>
+                <h3>A4 Format</h3>
+                <p>Perfect for documents</p>
             </div>
             <div class="feature-card">
                 <i class="fas fa-mobile-alt"></i>
@@ -495,9 +538,9 @@
                 <p>Works on any device</p>
             </div>
             <div class="feature-card">
-                <i class="fas fa-bolt"></i>
-                <h3>Fast & Free</h3>
-                <p>No registration needed</p>
+                <i class="fab fa-whatsapp"></i>
+                <h3>WhatsApp Support</h3>
+                <p>8571913651 for help</p>
             </div>
         </div>
     </div>
@@ -582,12 +625,26 @@
             reader.readAsDataURL(file);
         }
 
-        // Size configurations
+        // Size configurations - A4 format (210x297mm = 794x1123px at 96 DPI)
         const sizes = {
-            '4x6': { width: 1200, height: 900, cols: 2, rows: 3, text: '4×6 inches (6 Photos)' },
-            '2x3': { width: 1200, height: 1800, cols: 4, rows: 3, text: '2×3 inches (12 Photos)' },
-            '3x4': { width: 1200, height: 1600, cols: 3, rows: 2, text: '3×4 inches (18 Photos)' },
-            '1.5x2': { width: 1200, height: 1600, cols: 4, rows: 2, text: '1.5×2 inches (24 Photos)' }
+            'a4-6photos': { 
+                width: 794, 
+                height: 400,
+                cols: 6, 
+                rows: 1, 
+                photoWidth: 130, 
+                photoHeight: 160, 
+                text: 'A4 - 6 Photos (1 Line) - Single Line Format' 
+            },
+            'a4-8photos': { 
+                width: 794, 
+                height: 600,
+                cols: 4, 
+                rows: 2, 
+                photoWidth: 190, 
+                photoHeight: 240, 
+                text: 'A4 - 8 Photos (2 Lines) - Double Line Format' 
+            }
         };
 
         function drawPreview() {
@@ -603,27 +660,29 @@
             ctx.fillStyle = bgColor.value;
             ctx.fillRect(0, 0, previewCanvas.width, previewCanvas.height);
 
-            // Draw photos grid
-            const photoWidth = previewCanvas.width / size.cols;
-            const photoHeight = previewCanvas.height / size.rows;
-            const totalPhotos = size.cols * size.rows;
+            // Calculate margins for centering
+            const totalPhotosWidth = size.photoWidth * size.cols;
+            const marginLeft = (previewCanvas.width - totalPhotosWidth) / 2;
 
-            // Apply filters
+            const totalPhotosHeight = size.photoHeight * size.rows;
+            const marginTop = (previewCanvas.height - totalPhotosHeight) / 2;
+
+            // Draw photos grid
             ctx.filter = `brightness(${brightness.value}%) contrast(${contrast.value}%)`;
 
-            for (let i = 0; i < totalPhotos; i++) {
-                const col = i % size.cols;
-                const row = Math.floor(i / size.cols);
-                const x = col * photoWidth;
-                const y = row * photoHeight;
+            for (let row = 0; row < size.rows; row++) {
+                for (let col = 0; col < size.cols; col++) {
+                    const x = marginLeft + col * size.photoWidth;
+                    const y = marginTop + row * size.photoHeight;
 
-                // Draw border
-                ctx.strokeStyle = '#ddd';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(x, y, photoWidth, photoHeight);
+                    // Draw border
+                    ctx.strokeStyle = '#ddd';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(x, y, size.photoWidth, size.photoHeight);
 
-                // Draw image
-                ctx.drawImage(uploadedImage, x, y, photoWidth, photoHeight);
+                    // Draw image
+                    ctx.drawImage(uploadedImage, x, y, size.photoWidth, size.photoHeight);
+                }
             }
 
             ctx.filter = 'none';
@@ -669,12 +728,16 @@
                     <title>Print Passport Photos</title>
                     <style>
                         * { margin: 0; padding: 0; }
-                        body { padding: 10px; }
+                        body { padding: 0; margin: 0; }
                         img { width: 100%; height: auto; display: block; }
+                        @media print {
+                            body { margin: 0; padding: 0; }
+                            img { width: 210mm; height: auto; }
+                        }
                     </style>
                 </head>
                 <body onload="window.print(); window.close();">
-                    <img src="${img}" alt="Passport Photos">
+                    <img src="${img}" alt="Passport Photos A4">
                 </body>
                 </html>
             `);
