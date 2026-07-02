@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - SHAKTI CSC CENTER</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Login Screen */
+        .login-container {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 100%;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-card h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .login-card p {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="email"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .timer {
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .timer.expired {
+            color: #e74c3c;
+        }
+
+        .resend-btn {
+            background: #95a5a6;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 14px;
+            padding: 10px;
+        }
+
+        .resend-btn:hover:not(:disabled) {
+            background: #7f8c8d;
+        }
+
+        .whatsapp-note {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #2e7d32;
+        }
+
+        .whatsapp-note strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .error-msg {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            display: none;
+            font-size: 13px;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+
+        .success-msg {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            display: none;
+            font-size: 13px;
+        }
+
+        .success-msg.show {
+            display: block;
+        }
+
+        .otp-input-group {
+            display: flex;
+            gap: 8px;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .otp-input {
+            width: 45px !important;
+            height: 45px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            padding: 0 !important;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+        
+        .admin-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            padding: 20px;
+            color: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+        
+        .sidebar h2 {
+            margin-bottom: 30px;
+            text-align: center;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 15px;
+        }
+        
+        .sidebar nav ul {
+            list-style: none;
+        }
+        
+        .sidebar nav ul li {
+            margin: 15px 0;
+        }
+        
+        .sidebar nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            display: block;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .sidebar nav ul li a:hover,
+        .sidebar nav ul li a.active {
+            background: #667eea;
+            transform: translateX(5px);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%) !important;
+            margin-top: 30px;
+            width: 100%;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+        
+        .section {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            margin-top: 25px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        table tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .action-btn {
+            padding: 8px 12px;
+            margin-right: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            background: #667eea;
+        }
+
+        .action-btn.delete {
+            background: #e74c3c;
+        }
+        
+        .success-banner {
+            background: #27ae60;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-banner.show {
+            display: block;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .calculator-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .total-display {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .login-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-card">
+            <h2>🔐 Admin Login</h2>
+            <p>SHAKTI CSC Center Admin Panel</p>
+
+            <div id="errorMsg" class="error-msg"></div>
+            <div id="successMsg" class="success-msg"></div>
+
+            <!-- Step 1: Phone Number -->
+            <div id="phoneStep">
+                <div class="whatsapp-note">
+                    <strong>📱 WhatsApp OTP Verification</strong>
+                    OTP will be sent to your WhatsApp number
+                </div>
+
+                <div class="form-group">
+                    <label>WhatsApp Number</label>
+                    <input type="text" id="phoneInput" placeholder="+91 8571913652" value="+91 8571913652">
+                </div>
+
+                <button onclick="sendOTP()">📤 Send OTP on WhatsApp</button>
+
+                <p style="text-align: center; color: #999; font-size: 12px; margin-top: 15px;">
+                    Default: +91 8571913652
+                </p>
+            </div>
+
+            <!-- Step 2: OTP Verification -->
+            <div id="otpStep" class="hidden">
+                <p style="text-align: center; color: #666; margin-bottom: 20px;">
+                    Enter 4-digit OTP sent to WhatsApp
+                </p>
+
+                <div class="form-group">
+                    <label>Enter OTP</label>
+                    <div class="otp-input-group">
+                        <input type="number" class="otp-input" maxlength="1" placeholder="0" min="0" max="9">
+                        <input type="number" class="otp-input" maxlength="1" placeholder="0" min="0" max="9">
+                        <input type="number" class="otp-input" maxlength="1" placeholder="0" min="0" max="9">
+                        <input type="number" class="otp-input" maxlength="1" placeholder="0" min="0" max="9">
+                    </div>
+                </div>
+
+                <button onclick="verifyOTP()">✅ Verify OTP</button>
+
+                <div class="timer" id="timer"></div>
+
+                <button class="resend-btn" id="resendBtn" disabled onclick="sendOTP()">🔄 Resend OTP</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="admin-container hidden">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <h2>☁️ Admin Panel</h2>
+            <nav>
+                <ul>
+                    <li><a class="nav-link active" data-section="dashboard">📊 Dashboard</a></li>
+                    <li><a class="nav-link" data-section="services">🔧 Services</a></li>
+                    <li><a class="nav-link" data-section="documents">📄 Documents</a></li>
+                    <li><a class="nav-link" data-section="calculator">🧮 Calculator</a></li>
+                    <li><a class="nav-link" data-section="whatsapp">💬 WhatsApp</a></li>
+                    <li><a class="nav-link" data-section="settings">⚙️ Settings</a></li>
+                </ul>
+            </nav>
+            <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section active">
+                <h1>📊 Dashboard</h1>
+                <div class="success-banner" id="dashboardMsg"></div>
+                <div class="grid-2">
+                    <div class="calculator-box">
+                        <h3>📈 Total Services</h3>
+                        <p id="serviceCount" style="font-size: 24px; color: #667eea; margin-top: 10px;">0</p>
+                    </div>
+                    <div class="calculator-box">
+                        <h3>📋 Total Documents</h3>
+                        <p id="docCount" style="font-size: 24px; color: #667eea; margin-top: 10px;">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services Section -->
+            <div id="services" class="section">
+                <h1>🔧 Manage Services</h1>
+                <div class="success-banner" id="serviceMsg"></div>
+                
+                <div class="form-group">
+                    <label>Service Name</label>
+                    <input type="text" id="serviceName" placeholder="e.g., Aadhaar, PAN, Passport">
+                </div>
+
+                <div class="form-group">
+                    <label>Service Description</label>
+                    <textarea id="serviceDesc" placeholder="Describe the service" rows="3"></textarea>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Service Charge (₹)</label>
+                        <input type="number" id="serviceCharge" placeholder="Enter charge amount">
+                    </div>
+                    <div class="form-group">
+                        <label>Processing Time</label>
+                        <input type="text" id="serviceTime" placeholder="e.g., 2-3 days">
+                    </div>
+                </div>
+
+                <button onclick="addService()">➕ Add Service</button>
+
+                <h3>📋 Services List</h3>
+                <table id="servicesTable">
+                    <thead>
+                        <tr>
+                            <th>Service Name</th>
+                            <th>Charge (₹)</th>
+                            <th>Time</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <!-- Documents Section -->
+            <div id="documents" class="section">
+                <h1>📄 Manage Documents</h1>
+                <div class="success-banner" id="docMsg"></div>
+
+                <div class="form-group">
+                    <label>Document Name</label>
+                    <input type="text" id="docName" placeholder="e.g., Passport Size Photo">
+                </div>
+
+                <div class="form-group">
+                    <label>Document Description</label>
+                    <textarea id="docDesc" placeholder="Describe what document is needed" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Requirements (e.g., Size, Format)</label>
+                    <textarea id="docRequirements" placeholder="e.g., Size: 3.5cm x 4.5cm, Format: JPG/PNG, Color: Colored" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Related Service</label>
+                    <select id="docService">
+                        <option value="">Select a service</option>
+                    </select>
+                </div>
+
+                <button onclick="addDocument()">➕ Add Document</button>
+
+                <h3>📋 Documents List</h3>
+                <table id="documentsTable">
+                    <thead>
+                        <tr>
+                            <th>Document</th>
+                            <th>Requirements</th>
+                            <th>Service</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <!-- Calculator Section -->
+            <div id="calculator" class="section">
+                <h1>🧮 Charges Calculator</h1>
+                
+                <div class="calculator-box">
+                    <h2>Quick Calculator</h2>
+                    <label>Select Services (Click to add)</label>
+                    <div id="servicesList" style="margin-top: 15px;"></div>
+                    
+                    <div style="margin-top: 20px;">
+                        <h3>💰 Calculation</h3>
+                        <table style="margin-top: 10px;">
+                            <thead>
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Charge</th>
+                                </tr>
+                            </thead>
+                            <tbody id="calcTable"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="total-display">
+                        💵 Total Charges: <strong>₹<span id="totalAmount">0</span></strong>
+                    </div>
+
+                    <button onclick="resetCalculator()" style="width: 100%; margin-top: 15px;">🔄 Reset Calculator</button>
+                </div>
+            </div>
+
+            <!-- WhatsApp Section -->
+            <div id="whatsapp" class="section">
+                <h1>💬 WhatsApp Configuration</h1>
+                <div class="success-banner" id="whatsappMsg"></div>
+
+                <div class="form-group">
+                    <label>WhatsApp Business Number</label>
+                    <input type="text" id="whatsappNumber" placeholder="+91 XXXXXXXXXX" value="+91 8571913652">
+                </div>
+
+                <div class="form-group">
+                    <label>WhatsApp Message Template</label>
+                    <textarea id="whatsappMessage" placeholder="Hi! I want to send you the required documents." rows="5">Hello! Please send me the documents list and quote for the required services.</textarea>
+                </div>
+
+                <button onclick="saveWhatsappConfig()">💾 Save Configuration</button>
+
+                <h3>📱 Preview</h3>
+                <div class="calculator-box">
+                    <a href="https://wa.me/918571913652?text=Hello" target="_blank" class="btn-whatsapp" style="display: inline-block; background: #25D366; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin: 10px 0;">
+                        📤 Send Documents on WhatsApp
+                    </a>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings" class="section">
+                <h1>⚙️ Settings</h1>
+                <div class="success-banner" id="settingsMsg"></div>
+
+                <div class="form-group">
+                    <label>CSC Center Name</label>
+                    <input type="text" id="centerName" placeholder="SHAKTI CSC Center" value="SHAKTI CSC Center">
+                </div>
+
+                <div class="form-group">
+                    <label>Contact Email</label>
+                    <input type="email" id="centerEmail" placeholder="center@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label>Contact Phone</label>
+                    <input type="text" id="centerPhone" placeholder="+91 XXXXXXXXXX">
+                </div>
+
+                <div class="form-group">
+                    <label>WhatsApp Number (for OTP verification)</label>
+                    <input type="text" id="centerWhatsapp" placeholder="+91 8571913652" value="+91 8571913652">
+                </div>
+
+                <button onclick="saveSettings()">💾 Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // OTP Configuration
+        const ADMIN_PHONE = "+91 8571913652"; // आपका WhatsApp नंबर
+        const OTP_VALIDITY = 5 * 60 * 1000; // 5 मिनट
+        let generatedOTP = null;
+        let otpExpiryTime = null;
+        let otpResendTimer = null;
+
+        // Auto-focus OTP inputs
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('otp-input')) {
+                const inputs = document.querySelectorAll('.otp-input');
+                if (e.target.value) {
+                    const nextInput = e.target.nextElementSibling;
+                    if (nextInput) nextInput.focus();
+                }
+            }
+        });
+
+        // Generate random OTP
+        function generateOTP() {
+            return Math.floor(1000 + Math.random() * 9000).toString();
+        }
+
+        // Send OTP
+        function sendOTP() {
+            const phoneInput = document.getElementById('phoneInput').value.trim();
+            
+            if (!phoneInput) {
+                showError('कृपया फोन नंबर दर्ज करें');
+                return;
+            }
+
+            // Validate phone format
+            if (!/^\+91\s?\d{10}$/.test(phoneInput.replace(/\s/g, ''))) {
+                showError('कृपया सही WhatsApp नंबर दर्ज करें (जैसे: +91 8571913652)');
+                return;
+            }
+
+            // Generate OTP
+            generatedOTP = generateOTP();
+            otpExpiryTime = Date.now() + OTP_VALIDITY;
+
+            // Show OTP on console (डेमो के लिए)
+            console.log('🔐 Your OTP:', generatedOTP);
+            console.log('⏱️ OTP expires in 5 minutes');
+
+            // In production, send via WhatsApp API
+            // For demo: show message
+            showSuccess(`✅ OTP भेज दिया गया!<br>डेमो OTP: <strong>${generatedOTP}</strong><br>(Console में भी देख सकते हैं)`);
+
+            // Switch to OTP entry
+            document.getElementById('phoneStep').classList.add('hidden');
+            document.getElementById('otpStep').classList.remove('hidden');
+
+            // Clear previous OTP inputs
+            document.querySelectorAll('.otp-input').forEach(input => {
+                input.value = '';
+            });
+            document.querySelector('.otp-input').focus();
+
+            // Start countdown timer
+            startOTPTimer();
+            
+            // Enable resend after 30 seconds
+            setTimeout(() => {
+                document.getElementById('resendBtn').disabled = false;
+            }, 30000);
+        }
+
+        // Verify OTP
+        function verifyOTP() {
+            const otpInputs = document.querySelectorAll('.otp-input');
+            const enteredOTP = Array.from(otpInputs).map(input => input.value).join('');
+
+            if (enteredOTP.length !== 4) {
+                showError('कृपया 4 अंकों का OTP दर्ज करें');
+                return;
+            }
+
+            if (Date.now() > otpExpiryTime) {
+                showError('❌ OTP एक्सपायर हो गया है। दोबारा भेजें');
+                return;
+            }
+
+            if (enteredOTP !== generatedOTP) {
+                showError('❌ गलत OTP। कृपया दोबारा कोशिश करें');
+                return;
+            }
+
+            // OTP verified!
+            showSuccess('✅ सफलतापूर्वक लॉगिन हुए!');
+            
+            setTimeout(() => {
+                loginSuccess();
+            }, 1000);
+        }
+
+        // Start OTP countdown timer
+        function startOTPTimer() {
+            clearInterval(otpResendTimer);
+            let timeLeft = 5 * 60; // 5 मिनट
+
+            const updateTimer = () => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('timer').textContent = `⏱️ OTP ${minutes}:${seconds < 10 ? '0' : ''}${seconds} में एक्सपायर होगा`;
+
+                if (timeLeft <= 0) {
+                    document.getElementById('timer').textContent = 'OTP एक्सपायर हो गया';
+                    document.getElementById('timer').classList.add('expired');
+                    document.getElementById('resendBtn').disabled = false;
+                    clearInterval(otpResendTimer);
+                } else {
+                    timeLeft--;
+                    otpResendTimer = setTimeout(updateTimer, 1000);
+                }
+            };
+
+            updateTimer();
+        }
+
+        // Login Success
+        function loginSuccess() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('adminPanel').classList.remove('hidden');
+            displayServices();
+            displayDocuments();
+            updateDashboard();
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('क्या आप लॉगआउट करना चाहते हैं?')) {
+                document.getElementById('adminPanel').classList.add('hidden');
+                document.getElementById('loginScreen').classList.remove('hidden');
+                
+                // Reset login form
+                document.getElementById('phoneStep').classList.remove('hidden');
+                document.getElementById('otpStep').classList.add('hidden');
+                document.getElementById('phoneInput').value = '+91 8571913652';
+                document.querySelectorAll('.otp-input').forEach(input => input.value = '');
+                document.getElementById('errorMsg').innerHTML = '';
+                document.getElementById('successMsg').innerHTML = '';
+                clearInterval(otpResendTimer);
+            }
+        }
+
+        // Show error
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMsg');
+            errorDiv.innerHTML = message;
+            errorDiv.classList.add('show');
+            setTimeout(() => errorDiv.classList.remove('show'), 5000);
+        }
+
+        // Show success
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMsg');
+            successDiv.innerHTML = message;
+            successDiv.classList.add('show');
+            setTimeout(() => successDiv.classList.remove('show'), 5000);
+        }
+
+        // Navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                
+                this.classList.add('active');
+                const sectionId = this.getAttribute('data-section');
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+
+        // Local Storage Management
+        const DB = {
+            getServices: () => JSON.parse(localStorage.getItem('cscServices') || '[]'),
+            saveServices: (data) => localStorage.setItem('cscServices', JSON.stringify(data)),
+            
+            getDocuments: () => JSON.parse(localStorage.getItem('cscDocuments') || '[]'),
+            saveDocuments: (data) => localStorage.setItem('cscDocuments', JSON.stringify(data)),
+            
+            getWhatsapp: () => JSON.parse(localStorage.getItem('whatsappConfig') || '{}'),
+            saveWhatsapp: (data) => localStorage.setItem('whatsappConfig', JSON.stringify(data))
+        };
+
+        // Services Management
+        function addService() {
+            const name = document.getElementById('serviceName').value;
+            const desc = document.getElementById('serviceDesc').value;
+            const charge = document.getElementById('serviceCharge').value;
+            const time = document.getElementById('serviceTime').value;
+
+            if (!name || !charge) {
+                showBanner('serviceMsg', '❌ कृपया सभी जानकारी भरें', false);
+                return;
+            }
+
+            const services = DB.getServices();
+            services.push({ id: Date.now(), name, desc, charge: parseFloat(charge), time });
+            DB.saveServices(services);
+
+            showBanner('serviceMsg', '✅ सेवा सफलतापूर्वक जोड़ी गई!');
+            document.getElementById('serviceName').value = '';
+            document.getElementById('serviceDesc').value = '';
+            document.getElementById('serviceCharge').value = '';
+            document.getElementById('serviceTime').value = '';
+            
+            displayServices();
+            updateDashboard();
+        }
+
+        function displayServices() {
+            const services = DB.getServices();
+            const tbody = document.querySelector('#servicesTable tbody');
+            tbody.innerHTML = '';
+
+            services.forEach(service => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${service.name}</strong><br><small>${service.desc}</small></td>
+                        <td>₹${service.charge}</td>
+                        <td>${service.time}</td>
+                        <td>
+                            <button class="action-btn delete" onclick="deleteService(${service.id})">🗑️ Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            const select = document.getElementById('docService');
+            select.innerHTML = '<option value="">Select a service</option>';
+            services.forEach(service => {
+                select.innerHTML += `<option value="${service.name}">${service.name}</option>`;
+            });
+
+            updateCalculator();
+        }
+
+        function deleteService(id) {
+            if (confirm('क्या आप इस सेवा को हटाना चाहते हैं?')) {
+                const services = DB.getServices();
+                const filtered = services.filter(s => s.id !== id);
+                DB.saveServices(filtered);
+                displayServices();
+                updateDashboard();
+            }
+        }
+
+        // Documents Management
+        function addDocument() {
+            const name = document.getElementById('docName').value;
+            const desc = document.getElementById('docDesc').value;
+            const requirements = document.getElementById('docRequirements').value;
+            const service = document.getElementById('docService').value;
+
+            if (!name || !requirements) {
+                showBanner('docMsg', '❌ कृपया सभी जानकारी भरें', false);
+                return;
+            }
+
+            const documents = DB.getDocuments();
+            documents.push({ id: Date.now(), name, desc, requirements, service });
+            DB.saveDocuments(documents);
+
+            showBanner('docMsg', '✅ दस्तावेज सफलतापूर्वक जोड़ा गया!');
+            document.getElementById('docName').value = '';
+            document.getElementById('docDesc').value = '';
+            document.getElementById('docRequirements').value = '';
+            document.getElementById('docService').value = '';
+            
+            displayDocuments();
+            updateDashboard();
+        }
+
+        function displayDocuments() {
+            const documents = DB.getDocuments();
+            const tbody = document.querySelector('#documentsTable tbody');
+            tbody.innerHTML = '';
+
+            documents.forEach(doc => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${doc.name}</strong></td>
+                        <td><small>${doc.requirements}</small></td>
+                        <td>${doc.service}</td>
+                        <td>
+                            <button class="action-btn delete" onclick="deleteDocument(${doc.id})">🗑️ Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function deleteDocument(id) {
+            if (confirm('क्या आप इस दस्तावेज को हटाना चाहते हैं?')) {
+                const documents = DB.getDocuments();
+                const filtered = documents.filter(d => d.id !== id);
+                DB.saveDocuments(filtered);
+                displayDocuments();
+                updateDashboard();
+            }
+        }
+
+        // Calculator
+        let selectedServices = [];
+
+        function updateCalculator() {
+            const services = DB.getServices();
+            const container = document.getElementById('servicesList');
+            container.innerHTML = '';
+
+            services.forEach(service => {
+                const isSelected = selectedServices.some(s => s.id === service.id);
+                container.innerHTML += `
+                    <label style="margin: 10px 0; display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" ${isSelected ? 'checked' : ''} onchange="toggleService(${service.id}, '${service.name}', ${service.charge})" style="margin-right: 10px; width: 20px; height: 20px;">
+                        <span>${service.name} - ₹${service.charge}</span>
+                    </label>
+                `;
+            });
+        }
+
+        function toggleService(id, name, charge) {
+            const index = selectedServices.findIndex(s => s.id === id);
+            if (index > -1) {
+                selectedServices.splice(index, 1);
+            } else {
+                selectedServices.push({ id, name, charge });
+            }
+            updateCalculatorDisplay();
+        }
+
+        function updateCalculatorDisplay() {
+            const tbody = document.getElementById('calcTable');
+            tbody.innerHTML = '';
+            let total = 0;
+
+            selectedServices.forEach(service => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${service.name}</td>
+                        <td>₹${service.charge}</td>
+                    </tr>
+                `;
+                total += service.charge;
+            });
+
+            document.getElementById('totalAmount').textContent = total.toFixed(2);
+        }
+
+        function resetCalculator() {
+            selectedServices = [];
+            document.querySelectorAll('#servicesList input[type="checkbox"]').forEach(cb => cb.checked = false);
+            updateCalculatorDisplay();
+        }
+
+        // WhatsApp Configuration
+        function saveWhatsappConfig() {
+            const number = document.getElementById('whatsappNumber').value;
+            const message = document.getElementById('whatsappMessage').value;
+
+            if (!number) {
+                showBanner('whatsappMsg', '❌ कृपया WhatsApp नंबर दर्ज करें', false);
+                return;
+            }
+
+            DB.saveWhatsapp({ number, message });
+            showBanner('whatsappMsg', '✅ WhatsApp कॉन्फ़िगरेशन सहेजा गया!');
+
+            const cleanNumber = number.replace(/\D/g, '');
+            const link = document.querySelector('.btn-whatsapp');
+            link.href = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`;
+        }
+
+        // Settings
+        function saveSettings() {
+            showBanner('settingsMsg', '✅ सेटिंग्स सहेजी गईं!');
+        }
+
+        // Utilities
+        function showBanner(elementId, message, isSuccess = true) {
+            const el = document.querySelector(`#${elementId}`);
+            el.textContent = message;
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 3000);
+        }
+
+        function updateDashboard() {
+            document.getElementById('serviceCount').textContent = DB.getServices().length;
+            document.getElementById('docCount').textContent = DB.getDocuments().length;
+        }
+
+        // Initialize WhatsApp config
+        const config = DB.getWhatsapp();
+        if (config.number) {
+            document.getElementById('whatsappNumber').value = config.number;
+        }
+        if (config.message) {
+            document.getElementById('whatsappMessage').value = config.message;
+        }
+    </script>
+</body>
+</html>
