@@ -37,8 +37,9 @@ document.querySelectorAll('.service-card, .feature').forEach(element => {
 });
 
 // Form submission
-// const contactForm = document.querySelector('.contact-form');
-// if (contactForm) {
+const contactForm = document.querySelector('.contact-form');
+if (contactForm) {
+    console.log('Hello')
 //     contactForm.addEventListener('submit', function(e) {
 //         e.preventDefault();
         
@@ -58,7 +59,7 @@ document.querySelectorAll('.service-card, .feature').forEach(element => {
 //             alert('Please fill in all fields');
 //         }
 //     });
-// }
+}
 
 // Navbar scroll effect
 let lastScrollTop = 0;
