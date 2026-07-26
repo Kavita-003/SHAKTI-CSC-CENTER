@@ -37,28 +37,28 @@ document.querySelectorAll('.service-card, .feature').forEach(element => {
 });
 
 // Form submission
-const contactForm = document.querySelector('.contact-form');
-if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
+// const contactForm = document.querySelector('.contact-form');
+// if (contactForm) {
+//     contactForm.addEventListener('submit', function(e) {
+//         e.preventDefault();
         
-        // Get form values
-        const name = this.querySelector('input[type="text"]').value;
-        const email = this.querySelector('input[type="email"]').value;
-        const message = this.querySelector('textarea').value;
+//         // Get form values
+//         const name = this.querySelector('input[type="text"]').value;
+//         const email = this.querySelector('input[type="email"]').value;
+//         const message = this.querySelector('textarea').value;
         
-        // Simple validation
-        if (name && email && message) {
-            // Show success message
-            alert('Thank you for contacting us! We will get back to you soon.');
+//         // Simple validation
+//         if (name && email && message) {
+//             // Show success message
+//             alert('Thank you for contacting us! We will get back to you soon.');
             
-            // Reset form
-            this.reset();
-        } else {
-            alert('Please fill in all fields');
-        }
-    });
-}
+//             // Reset form
+//             this.reset();
+//         } else {
+//             alert('Please fill in all fields');
+//         }
+//     });
+// }
 
 // Navbar scroll effect
 let lastScrollTop = 0;
